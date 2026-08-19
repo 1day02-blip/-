@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レトロ・リフレクション 公式サイト</title>
+    <!-- 品のある洗練された明朝系・英文フォントの読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 乃木坂風の品格 ＋ 上品なパープル＆ローズ */
+            --primary-purple: #5c1d73;    /* 深みと気品のあるパープル */
+            --soft-purple: #812c9c;       /* やわらかい紫のアクセント */
+            --antique-rose: #bf3563;      /* 洗練されたシックなローズ */
+            --subtle-gold: #c5a059;       /* 控えめで上質なゴールド */
+            --bg-light: #fbf9fc;          /* 清潔感のあるオフホワイト */
+            --card-bg: #ffffff;
+            --text-main: #2b242c;         /* シックで読みやすいダークグレー */
+            --text-sub: #6c6370;
+            --border-color: #e8dede;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Shippori Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            background: linear-gradient(135deg, #f8f3f9 0%, #f1f4f8 50%, #f9f1f4 100%);
+            color: var(--text-main);
+            position: relative;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 控えめで静かな光の反射（リフレクション）アニメーション */
+        body::before {
+            content: "✦ ✧ ◈ ✦ ✧ ◈ ✦ ✧";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            font-size: 18px;
+            color: rgba(92, 29, 115, 0.12);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: space-around;
+            z-index: 0;
+            animation: reflectionFade 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes reflectionFade {
+            0% { opacity: 0.15; transform: translateY(0px); filter: blur(0px); }
+            50% { opacity: 0.4; color: rgba(197, 160, 89, 0.2); }
+            100% { opacity: 0.25; transform: translateY(-8px); filter: blur(0.5px); }
+        }
+
+        /* === カーソルエフェクト用スタイル（控えめ設定） === */
+        .cursor-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: particleFade 0.6s ease-out forwards;
+        }
+
+        @keyframes particleFade {
+            0% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -10px) scale(0.3);
+            }
+        }
+
+        /* === 固定ヘッダー（ナビゲーション） === */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(92, 29, 115, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+        }
+
+        .logo {
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--primary-purple);
+        }
+
+        .logo-sub {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            display: block;
+            color: var(--subtle-gold);
+            margin-top: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cinzel', serif;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--antique-rose);
+        }
+
+        /* === レイアウト共通 === */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 45px;
+            letter-spacing: 5px;
+            color: var(--primary-purple);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 1px;
+            background: var(--subtle-gold);
+            margin: 14px auto 0;
+        }
+
+        /* === NEWS セクション === */
+        .news-list {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 24px 36px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+            margin-bottom: 80px;
+        }
+
+        .news-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #f2ebf5;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-date {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+            min-width: 90px;
+        }
+
+        .news-category {
+            font-size: 0.7rem;
+            padding: 3px 14px;
+            border-radius: 20px;
+            letter-spacing: 1.5px;
+            color: #fff;
+        }
+
+        .cat-live { background: var(--antique-rose); }
+        .cat-media { background: var(--primary-purple); }
+        .cat-info { background: #4a6fa5; }
+
+        .news-title {
+            font-size: 0.92rem;
+            color: var(--text-main);
+            flex: 1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .news-title:hover {
+            color: var(--soft-purple);
+        }
+
+        /* === LIVE & SCHEDULE セクション === */
+        .live-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+
+        .live-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .live-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(92, 29, 115, 0.08);
+        }
+
+        .live-header {
+            background: linear-gradient(135deg, var(--primary-purple), var(--soft-purple));
+            color: #fff;
+            padding: 18px 24px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1.5px;
+        }
+
+        .live-date {
+            font-size: 1.05rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .live-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .live-title {
+            font-size: 1rem;
+            margin: 0 0 12px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .live-info {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* === MEMBER PROFILE セクション === */
+        .member-card {
+            display: flex;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 45px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s;
+        }
+
+        .member-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .member-img-box {
+            flex: 1 1 280px;
+            min-height: 350px;
+            background: #f4eff7;
+        }
+
+        .member-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .member-content {
+            flex: 2 1 380px;
+            padding: 38px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .color-badge {
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 14px;
+            width: fit-content;
+        }
+
+        .member-name {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin: 0 0 8px;
+            letter-spacing: 3px;
+        }
+
+        .catchphrase {
+            font-size: 0.88rem;
+            margin-bottom: 18px;
+            color: var(--soft-purple);
+            letter-spacing: 1px;
+        }
+
+        .description {
+            font-size: 0.85rem;
+            line-height: 1.9;
+            color: var(--text-sub);
+            margin-bottom: 24px;
+        }
+
+        /* === アクションボタン (共通) === */
+        .action-btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: transparent;
+            color: var(--primary-purple);
+            border: 1px solid var(--primary-purple);
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Shippori Mincho', serif;
+            font-size: 0.82rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-purple);
+            color: #ffffff;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* === SNS FEED セクション === */
+        .sns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+
+        .sns-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .sns-img-box {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            background: #f4eff7;
+        }
+
+        .sns-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sns-caption {
+            padding: 16px;
+            font-size: 0.82rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* === モーダルポップアップ === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 36px;
+            max-width: 480px;
+            width: 88%;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-purple);
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-sub);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--primary-purple);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .modal-body {
+            font-size: 0.88rem;
+            color: var(--text-main);
+            line-height: 1.8;
+        }
+
+        /* === フッター === */
+        footer {
+            text-align: center;
+            padding: 45px 20px 35px;
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            margin-top: 90px;
+            color: var(--text-sub);
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-notice {
+            margin-top: 16px;
+            font-size: 0.72rem;
+            color: #9a90a0;
+            letter-spacing: 1px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            nav ul { gap: 14px; font-size: 0.75rem; }
+            .member-card { flex-direction: column; }
+            .member-img-box { min-height: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー（ナビゲーション） -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                レトロ・リフレクション
+                <span class="logo-sub">RETRO REFLECTION</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#news">NEWS</a></li>
+                    <li><a href="#live">LIVE</a></li>
+                    <li><a href="#members">MEMBER</a></li>
+                    <li><a href="#sns">SNS</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. NEWS セクション -->
+        <section id="news">
+            <h2 class="section-title">NEWS</h2>
+            <div class="news-list">
+                <div class="news-item">
+                    <span class="news-date">2026.08.20</span>
+                    <span class="news-category cat-live">LIVE</span>
+                    <a href="#" class="news-title">「レトロ・リフレクション 1st アリーナツアー 2026」追加公演決定のお知らせ</a>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">2026.08.15</span>
+                    <span class="news-category cat-media">MEDIA</span>
+                    <a href="#" class="news-title">レトリフ特別密着番組『JAPAN IDOL SUPER STAGE』への生出演が決定</a>
+                </div>
+                <div class="news-item">
+                    <span class="news-date">2026.08.10</span>
+                    <span class="news-category cat-info">INFO</span>
+                    <a href="#" class="news-title">レトロ・リフレクション公式ファンクラブ開設＆限定オリジナルグッズ販売スタート</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. LIVE & SCHEDULE セクション -->
+        <section id="live">
+            <h2 class="section-title">LIVE / SCHEDULE</h2>
+            <div class="live-grid">
+                <div class="live-card">
+                    <div class="live-header">
+                        <span class="live-date">2026.09.12 [SAT]</span>
+                        OPEN 16:00 / START 17:00
+                    </div>
+                    <div class="live-body">
+                        <div>
+                            <h3 class="live-title">レトロ・リフレクション 1st アリーナツアー</h3>
+                            <div class="live-info">
+                                📍 会場：横浜アリーナ<br>
+                                🎫 チケット：指定席 ￥8,800（税込）
+                            </div>
+                        </div>
+                        <button class="action-btn" onclick="openModal('チケット申込み【横浜公演】', '2026.09.12 [SAT] 横浜アリーナ公演<br><br>【FC先行抽選】受付中<br>【一般発売】2026.08.25〜<br><br>※外部チケットプレイガイドへ遷移します（準備中）')">チケットを予約する</button>
+                    </div>
+                </div>
+
+                <div class="live-card">
+                    <div class="live-header">
+                        <span class="live-date">2026.09.20 [SUN]</span>
+                        OPEN 15:30 / START 16:30
+                    </div>
+                    <div class="live-body">
+                        <div>
+                            <h3 class="live-title">レトリフ 秋のスペシャルアコースティックライブ</h3>
+                            <div class="live-info">
+                                📍 会場：大阪城ホール<br>
+                                🎫 チケット：指定席 ￥8,800（税込）
+                            </div>
+                        </div>
+                        <button class="action-btn" onclick="openModal('チケット申込み【大阪公演】', '2026.09.20 [SUN] 大阪城ホール公演<br><br>【FC先行抽選】受付中<br>【一般発売】2026.08.25〜<br><br>※外部チケットプレイガイドへ遷移します（準備中）')">チケットを予約する</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MEMBER PROFILE セクション -->
+        <section id="members">
+            <h2 class="section-title">MEMBER PROFILE</h2>
+
+            <!-- 1. 桃瀬 ねお -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/01-01.jpg" alt="桃瀬 ねお">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#fce4ec; color:#c2185b;">✦ クラシックピンク</span>
+                    <h3 class="member-name">桃瀬 ねお</h3>
+                    <div class="catchphrase">「みんなの笑顔が、ねおのエネルギー✨」</div>
+                    <p class="description">
+                        王道アイドルの気品と明るさを併せ持つ絶対的ムードメーカー。カフェ巡りやアンティーク収集が趣味で、レトリフのフロントメンバーとしてグループを引っ張ります。
+                    </p>
+                    <button class="action-btn" onclick="openModal('桃瀬 ねお', '【誕生日】3月12日 (A型)<br>【出身地】東京都<br>【趣味】純喫茶巡り、古い文房具の収集<br>【担当】センター / ヴォーカル<br><br>幼少期から培った表現力で魅せるライブのMCパートにも定評があり、客席全体を温かい空気で包み込む天才的な愛嬌の持ち主。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+            <!-- 2. 蒼井 ろあ -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/02-01.jpg" alt="蒼井 ろあ">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#e1f5fe; color:#0288d1;">✦ ミッドナイトブルー</span>
+                    <h3 class="member-name">蒼井 ろあ</h3>
+                    <div class="catchphrase">「静寂の先に、最高の瞬間を🎮」</div>
+                    <p class="description">
+                        涼しげな表情からは想像つかないほどのガチゲーマー。eスポーツ大会でのプレイや静かな夜の配信で見せるギャップが魅力の努力家です。
+                    </p>
+                    <button class="action-btn" onclick="openModal('蒼井 ろあ', '【誕生日】11月8日 (O型)<br>【出身地】京都府<br>【趣味】レトロゲーム、音楽鑑賞<br>【担当】リーダー / ダンス<br><br>クールに見えて実は情に厚く、ダンスの振付確認では他のメンバーのサポートに回るなど、裏での思いやりも欠かしません。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+            <!-- 3. 黄波 まろん -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/03-01.jpg" alt="黄波 まろん">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#fff8e1; color:#f57f17;">✦ ヴィンテージイエロー</span>
+                    <h3 class="member-name">黄波 まろん</h3>
+                    <div class="catchphrase">「美味しいものと弾ける笑顔をお届け！」</div>
+                    <p class="description">
+                        明るいエネルギー100%！温かいリアクションと可憐な佇まいでファンを魅了するムードメーカー。レトロな街並み散策が大好き。
+                    </p>
+                    <button class="action-btn" onclick="openModal('黄波 まろん', '【誕生日】7月25日 (B型)<br>【出身地】愛知県<br>【趣味】パフェ巡り、昭和ポップス鑑賞<br>【担当】ムードメーカー / ヴォーカル<br><br>美味しそうにご飯を食べる姿が親しみやすく、カメラが回るとパッと周りを明るく照らす太陽のような存在感を発揮します。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+            <!-- 4. 紫藤 むらさき -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/04-01.jpg" alt="紫藤 むらさき">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#f3e5f5; color:#7b1fa2;">✦ ノスタルジックパープル</span>
+                    <h3 class="member-name">紫藤 むらさき</h3>
+                    <div class="catchphrase">「鏡の向こうの世界、覗いてみる……？🖤」</div>
+                    <p class="description">
+                        クラシカル×モダンな独自ファッションセンスでサブカルアイコンとして君臨。ミステリアスな空気感と透明感あふれる歌声で魅了します。
+                    </p>
+                    <button class="action-btn" onclick="openModal('紫藤 むらさき', '【誕生日】10月31日 (AB型)<br>【出身地】神奈川県<br>【趣味】古着屋巡り、イラスト描き<br>【担当】ビジュアル / ヴォーカル<br><br>衣装のデザイン案やライブのヴィジュアル世界観にも自身のこだわりを反映させるクリエイティブな一面を保持。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+            <!-- 5. 翡翠 ちろ -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/05-01.jpg" alt="翡翠 ちろ">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#e0f2f1; color:#00796b;">✦ プリズムグリーン</span>
+                    <h3 class="member-name">翡翠 ちろ</h3>
+                    <div class="catchphrase">「最高の輝きを、毎日更新中✨」</div>
+                    <p class="description">
+                        グループの美容・スタイルアイコン。凛とした姿勢と独自のメイク表現をSNSで発信しており、洗練された佇まいが同性からも絶大な支持を得ています。
+                    </p>
+                    <button class="action-btn" onclick="openModal('翡翠 ちろ', '【誕生日】5月19日 (A型)<br>【出身地】兵庫県<br>【趣味】コスメ収集、ピラティス<br>【担当】スタイルアイコン / ダンス<br><br>セルフプロデュース力に長けており、完璧なビジュアルとは裏腹に、ふとした時に見せるお茶目な一面が魅力的。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+            <!-- 6. 日向 ここの -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/06-01.jpg" alt="日向 ここの">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#fff3e0; color:#e65100;">✦ サンセットオレンジ</span>
+                    <h3 class="member-name">日向 ここの</h3>
+                    <div class="catchphrase">「ひたむきに、まっすぐ走るだけ！」</div>
+                    <p class="description">
+                        抜群の運動神経と爽やかな笑顔を持つパフォーマー。スポーツ特番での全力投球な姿や、ステージ上でのダイナミックなダンスが印象的です。
+                    </p>
+                    <button class="action-btn" onclick="openModal('日向 ここの', '【誕生日】8月3日 (O型)<br>【出身地】千葉県<br>【趣味】ランニング、ボルダリング<br>【担当】メインダンサー<br><br>何事にも一直線で向き合う素直な性格で、ライブの後半戦でも一切体力を切らさず観客を引っ張っていくパワフルなステージングが魅力。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+            <!-- 7. 白雪 るな -->
+            <div class="member-card">
+                <div class="member-img-box">
+                    <img src="image/07-01.jpg" alt="白雪 るな">
+                </div>
+                <div class="member-content">
+                    <span class="color-badge" style="background:#eceff1; color:#455a64;">✦ ルミナスホワイト</span>
+                    <h3 class="member-name">白雪 るな</h3>
+                    <div class="catchphrase">「記憶に寄り添う、旋律を紡いで」</div>
+                    <p class="description">
+                        楽曲プロデュースもこなすレトリフの音楽的支柱。繊細かつ伸びやかな圧倒的歌唱力で、楽曲の世界観を綺麗に描き出します。
+                    </p>
+                    <button class="action-btn" onclick="openModal('白雪 るな', '【誕生日】1月22日 (A型)<br>【出身地】北海道<br>【趣味】作詞作曲、珈琲を淹れること<br>【担当】メインヴォーカル / コンポーザー<br><br>ピアノ演奏や作詞作曲の才能に長け、静かな情熱を内に秘め、音楽を通じて人々の心に寄り添う作品を生み出し続けています。')">詳細プロフィール</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 4. OFFICIAL SNS FEED セクション -->
+        <section id="sns">
+            <h2 class="section-title">OFFICIAL SNS FEED</h2>
+            <div class="sns-grid">
+                <!-- 1. 桃瀬 ねお -->
+                <div class="sns-card">
+                    <div class="sns-img-box">
+                        <img src="image/sns-01.jpg" alt="桃瀬ねお SNS">
+                    </div>
+                    <div class="sns-caption">💖 @momoseneo: レトロな純喫茶で美味しいパフェを発見♪ #レトリフ #桃瀬ねお</div>
+                </div>
+
+                <!-- 2. 黄波 まろん -->
+                <div class="sns-card">
+                    <div class="sns-img-box">
+                        <img src="image/sns-02.jpg" alt="黄波まろん SNS">
+                    </div>
+                    <div class="sns-caption">⭐ @kinamimaron: 今日もツアーリハお疲れ様！しっかり食べて元気をチャージ♪ #レトロリフレクション</div>
+                </div>
+
+                <!-- 3. 紫藤 むらさき -->
+                <div class="sns-card">
+                    <div class="sns-img-box">
+                        <img src="image/sns-03.jpg" alt="紫藤むらさき SNS">
+                    </div>
+                    <div class="sns-caption">🖤 @shidomurasaki: 今日のOOTD。クラシカルなパープルコーデ。 #レトリフ</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- モーダルポップアップ表示エリア -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModalDirect()">&times;</button>
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer>
+        <p>&copy; レトロ・リフレクション 公式ファンサイト All Rights Reserved.</p>
+        <p class="ai-notice">※当ウェブサイトは、掲載されている画像・テキスト・デザイン等を含め、すべてのコンテンツがAI技術によって生成された架空のものです。</p>
+    </footer>
+
+    <!-- JavaScript (ポップアップ & カーソルエフェクト制御) -->
+    <script>
+        /* モーダル制御 */
+        function openModal(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = text;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModalDirect() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function closeModal(event) {
+            if (event.target === document.getElementById('modalOverlay')) {
+                closeModalDirect();
+            }
+        }
+
+        /* カーソル軌跡エフェクト（控えめ設定） */
+        const colors = ['#812c9c', '#bf3563', '#c5a059', '#a26bb3'];
+        let lastX = 0, lastY = 0;
+
+        document.addEventListener('mousemove', function(e) {
+            // 生成頻度の抑制：30px移動毎に生成
+            const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+            if (dist < 30) return; 
+
+            lastX = e.clientX;
+            lastY = e.clientY;
+
+            createParticle(e.clientX, e.clientY);
+        });
+
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'cursor-particle';
+            
+            // 2px〜6pxの小径サイズ
+            const size = Math.floor(Math.random() * 5) + 2; 
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.background = color;
+            particle.style.boxShadow = `0 0 4px ${color}`;
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 600);
+        }
+    </script>
+</body>
+</html>
